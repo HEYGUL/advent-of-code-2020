@@ -7,8 +7,8 @@ test('returns 514579 with sample list', () => {
     366,
     299,
     675,
-    1456,
-  ];
+    1456
+  ]
 
   const result = day1.solvePart1(sampleList)
 
@@ -22,8 +22,8 @@ test('returns 241861950 with sample list', () => {
     366,
     299,
     675,
-    1456,
-  ];
+    1456
+  ]
 
   const result = day1.solvePart2(sampleList, 3)
 
