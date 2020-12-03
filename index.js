@@ -9,7 +9,7 @@ const options = cli.parse({
 const input = fs.readFileSync(options.file, 'utf8').split('\n')
 const normalizedInput = _.compact(input)
 
-const day2 = require('./day2/day2')
+const day3 = require('./day3/day3')
 
-const solution = day2.solvePart2(normalizedInput)
+const solution = day3.solvePart1(normalizedInput)
 console.log(solution)
