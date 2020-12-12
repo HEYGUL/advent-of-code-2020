@@ -13,9 +13,13 @@ test('solves part 1', () => {
 })
 
 test('solves part 2', () => {
-  const input = ''
+  const input = 'F10\n' +
+      'N3\n' +
+      'F7\n' +
+      'R90\n' +
+      'F11'
 
   const solution = solvePart2(input)
 
-  expect(solution).toEqual()
+  expect(solution).toEqual(286)
 })

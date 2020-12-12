@@ -29,6 +29,24 @@ function directionFromFacing (facing) {
   }
 }
 
+// y' = y*cos(a) + x*sin(a)
+// x' = - y*sin(a) + x*cos(a)
+function rotateWaypointAnticlockwise (degrees, point) {
+  const radians = Math.PI * degrees / 180
+  const n = point.n * Math.cos(radians) + point.e * Math.sin(radians)
+  const e = -1 * (point.n * Math.sin(radians)) + point.e * Math.cos(radians)
+  return { e: Math.round(e), n: Math.round(n) }
+}
+
+// y' = y*cos(a) - x*sin(a)
+// x' = y*sin(a) + x*cos(a)
+function rotateWaypointClockwise (degrees, point) {
+  const radians = Math.PI * degrees / 180
+  const n = point.n * Math.cos(radians) - point.e * Math.sin(radians)
+  const e = point.n * Math.sin(radians) + point.e * Math.cos(radians)
+  return { e: Math.round(e), n: Math.round(n) }
+}
+
 module.exports = {
 
   solvePart1 (input) {
@@ -72,5 +90,39 @@ module.exports = {
 
   solvePart2 (input) {
     const lines = input.split('\n')
+    let east = 0; let north = 0
+    let waypoint = { n: 1, e: 10 }
+
+    lines.forEach(line => {
+      const direction = line.charAt(0)
+      const units = parseInt(line.slice(1), 10)
+
+      switch (direction) {
+        case 'F':
+          north += (waypoint.n * units)
+          east += (waypoint.e * units)
+          break
+        case 'N':
+          waypoint.n += units
+          break
+        case 'S':
+          waypoint.n -= units
+          break
+        case 'E':
+          waypoint.e += units
+          break
+        case 'W':
+          waypoint.e -= units
+          break
+        case 'L':
+          waypoint = rotateWaypointAnticlockwise(units, waypoint)
+          break
+        case 'R':
+          waypoint = rotateWaypointClockwise(units, waypoint)
+          break
+      }
+    })
+
+    return Math.abs(east) + Math.abs(north)
   }
 }
