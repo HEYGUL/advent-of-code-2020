@@ -3,74 +3,56 @@ const _ = require('lodash')
 module.exports = {
 
   solvePart1 (input) {
-    const lines = input.split('\n').filter(s => !_.isEmpty(s))
+    const numbers = input.split(',').map(s => parseInt(s, 10))
 
-    let mask = ''
-    const mem = {}
+    let index = numbers.length - 1
+    const spoken = _.clone(numbers)
 
-    lines.forEach(line => {
-      if (_.startsWith(line, 'mask')) {
-        mask = line.replace('mask = ', '')
+    while (index < 2020) {
+      const lastNumber = spoken[index]
+      const lastLastIndex = _.lastIndexOf(spoken, lastNumber, index - 1)
+      if (lastLastIndex < 0) {
+        spoken[index + 1] = 0
       } else {
-        const [, address, decimalValue] = line.match(/\[(\d+)] = (\d+)/)
-        const value = parseInt(decimalValue, 10).toString(2)
-        const maskedValue = ('X'.repeat(mask.length - value.length) + value).split('')
-        _.forEach(mask.split(''), (bit, index) => {
-          if (bit !== 'X') {
-            maskedValue[index] = bit
-          } else {
-            maskedValue[index] = maskedValue[index] === 'X' ? '0' : maskedValue[index]
-          }
-        })
-        mem[address] = parseInt(maskedValue.join(''), 2)
+        spoken[index + 1] = index - lastLastIndex
       }
-    })
-    return _.sum(_.values(mem))
+      index++
+    }
+    return spoken[index - 1]
   },
 
   solvePart2 (input) {
-    const lines = input.split('\n').filter(s => !_.isEmpty(s))
+    const numbers = input.split(',').map(s => parseInt(s, 10))
 
-    let mask = ''
-    const mem = {}
-    const maskedAddress = {}
-    let offsetAddress = [0]
-
-    lines.forEach(line => {
-      if (_.startsWith(line, 'mask')) {
-        mask = line.replace('mask = ', '')
-
-        offsetAddress = [0]
-        _.forEach(mask.split(''), (bit, index) => {
-          if (bit === 'X') {
-            maskedAddress[index] = 'X'
-            const count = offsetAddress.length
-            for (let i = 0; i < count; i++) {
-              offsetAddress.push(offsetAddress[i] + Math.pow(2, (36 - index - 1)))
-            }
-          } else {
-            maskedAddress[index] = bit === '1' ? '1' : maskedAddress[index]
-          }
-        })
-      } else {
-        const [, address, decimalValue] = line.match(/\[(\d+)] = (\d+)/)
-        const value = parseInt(decimalValue, 10)
-        const binaryAddress = parseInt(address, 10).toString(2)
-        const maskedAddress = ('0'.repeat(mask.length - binaryAddress.length) + binaryAddress).split('')
-        _.forEach(mask.split(''), (bit, index) => {
-          if (bit === 'X') {
-            maskedAddress[index] = '0'
-          } else if (bit === '1') {
-            maskedAddress[index] = 1
-          }
-        })
-        const baseAddress = parseInt(maskedAddress.join(''), 2)
-
-        offsetAddress.forEach((offset, index) => {
-          mem[baseAddress + offset] = value
-        })
-      }
+    let index = numbers.length
+    const spoken = _.clone(numbers)
+    const turns = new Array(30000000)
+    spoken.forEach((n, index) => {
+      turns[n] = [index + 1]
     })
-    return _.sum(_.values(mem))
+
+    while (index < 30000000) {
+      const lastNumber = spoken[index - 1]
+      const lastNumberTurns = turns[lastNumber]
+
+      const nextNumber = (lastNumberTurns && lastNumberTurns.length > 1)
+        ? lastNumberTurns[1] - lastNumberTurns[0]
+        : 0
+
+      const nextNumberTurns = turns[nextNumber]
+      if (nextNumberTurns) {
+        turns[nextNumber] = [
+          nextNumberTurns.pop(),
+          index + 1
+        ]
+      } else {
+        turns[nextNumber] = [index + 1]
+      }
+
+      spoken.push(nextNumber)
+
+      index++
+    }
+    return spoken[index - 1]
   }
 }
