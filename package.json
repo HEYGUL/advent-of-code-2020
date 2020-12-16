@@ -4,7 +4,9 @@
   "description": "Advent of code puzzles solvers for year 2020",
   "main": "day1.js",
   "scripts": {
-    "test": "jest ."
+    "test": "jest .",
+    "test:watch": "jest $(echo day$(date +%d)) --watch",
+    "boot": "cp -r _template_ $(echo day$(date +%d))"
   },
   "author": "GUL",
   "license": "MIT",
@@ -18,6 +20,7 @@
     "eslint-config-standard": "16.0.2",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "4.2.1"
+    "eslint-plugin-promise": "4.2.1",
+    "plop": "2.7.4"
   }
 }
