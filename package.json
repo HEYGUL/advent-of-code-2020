@@ -2,11 +2,12 @@
   "name": "advent-of-code-2020",
   "version": "1.0.0",
   "description": "Advent of code puzzles solvers for year 2020",
-  "main": "day1.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest .",
     "test:watch": "jest $(echo day$(date +%d)) --watch",
-    "boot": "cp -r _template_ $(echo day$(date +%d))"
+    "boot": "cp -r _template_ $(echo day$(date +%d))",
+    "solve": "nodemon ."
   },
   "author": "GUL",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
+    "nodemon": "2.0.6",
     "plop": "2.7.4"
   }
 }
